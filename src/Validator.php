@@ -44,6 +44,12 @@ class Validator {
                             $this->errors[$input][] = "Pole {$input} musi być liczbą.";
                         }
                         break;
+                    case 'array':
+                        if (!isset($this->data[$input])) break;
+                        if (!is_array($this->data[$input])) {
+                            $this->errors[$input][] = "Pole {$input} musi być tablicą.";
+                        }
+                        break;
                     case 'alpha_dash':
                         if (!isset($this->data[$input])) break;
                         if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $this->data[$input])) {
