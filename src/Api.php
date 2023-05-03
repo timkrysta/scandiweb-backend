@@ -11,7 +11,7 @@ class Api {
         http_response_code(405);
         header('Content-Type: application/json');
         echo json_encode([
-            'message' => 'Method Not Allowed. This route supports only POST requests.'
+            'message' => 'Method Not Allowed. This route supports only '.implode(', ', $methods).'.'
         ]);
         exit();
     }
