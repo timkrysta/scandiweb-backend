@@ -77,7 +77,7 @@ class Validator {
                         if (!isset($_POST[$input])) break;
                         $table  = $ruleParams[0];
                         $column = $ruleParams[1];
-                        $db = new DB('localhost', 'root', '', 'web_developer_test_assignment');
+                        $db = new DB();
                         $result = $db->getRecordCount(
                             "SELECT * FROM {$table} WHERE {$column} = ?;", 
                             's', 

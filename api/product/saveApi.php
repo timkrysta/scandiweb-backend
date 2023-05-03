@@ -46,7 +46,7 @@ $attributes = [
     'length' => $_POST['length'] ?? null,
     'width'  => $_POST['width']  ?? null,
 ];
-$db = new DB('localhost', 'root', '', 'web_developer_test_assignment');
+$db = new DB();
 $columns = implode(', ', array_keys($attributes));
 $values  = implode(', ', array_fill(0, count($attributes), '?')); // ?, ?, ? ...
 $insertId = $db->insert(

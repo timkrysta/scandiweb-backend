@@ -16,12 +16,30 @@ class DB
 {
     private mysqli|PDO $conn;
 
+    private string $host;
+    private string $username;
+    private string $password;
+    private string $database;
+
     /**
      * PHP implicitly takes care of cleanup for default connection types.
      * So no need to worry about closing the connection.
      *
      * Keeping things simple and that works!
      */
+    public function __construct() {
+        $credentialsFile = $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'database/credentials.json';
+        $credentials = file_get_contents($credentialsFile);
+        $credentials = json_decode($credentials, true);
+
+        $this->host     = $credentials['host'];
+        $this->username = $credentials['username'];
+        $this->password = $credentials['password'];
+        $this->database = $credentials['database'];
+
+        $this->conn = $this->getConnection();
+    }
+    /* TODO(tim): keep either above or this
     public function __construct(
         private string $host,
         private string $username,
@@ -29,7 +47,7 @@ class DB
         private string $database
     ) {
         $this->conn = $this->getConnection();
-    }
+    } */
 
     /**
      * If connection object is needed, use this method to get access to it.
