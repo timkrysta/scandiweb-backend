@@ -28,7 +28,7 @@ class Validator {
                         $otherField = $ruleParams[0];
                         $otherValue = $ruleParams[1];
         
-                        if ($_POST[$otherField] === $otherValue && !isset($_POST[$input])) {
+                        if (isset($_POST[$otherField]) && $_POST[$otherField] === $otherValue && !isset($_POST[$input])) {
                             $this->errors[$input][] = "Pole {$input} jest wymagane gdy {$otherField} ma wartość {$otherValue}.";
                         }
                         break;
