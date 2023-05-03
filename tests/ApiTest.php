@@ -52,7 +52,7 @@ final class ApiTest extends TestCase
     public function test_add_product_success(): void
     {
         $json = '{
-            "sku":"ProductSku100",
+            "sku":"ProductSku'.rand(0, 10000000).'",
             "name":"ProductName",
             "price":100,
             "productType":"dvd",
