@@ -3,8 +3,10 @@
 namespace Timkrysta;
 
 use mysqli;
+use mysqli_stmt;
 use PDO;
 use PDOException;
+use PDOStatement;
 
 /**
  * Generic DB class for handling DB operations.
@@ -138,13 +140,13 @@ class DB
      * 1. Prepare parameters to bind.
      * 2. Bind prameters to the SQL statement
      *
-     * @param string $stmt
-     * @param string $paramType
-     * @param array $paramArray
+     * @param mysqli_stmt|PDOStatement|false $stmt
+     * @param string $paramType (There are four possible types: i, d, s and b, which stand for integer, double, string and binary)
+     * @param array  $paramArray
      * 
      * @return void
      */
-    public function bindQueryParams(string $stmt, string $paramType, array $paramArray = []): void
+    public function bindQueryParams(mysqli_stmt|PDOStatement|false $stmt, string $paramType, array $paramArray = []): void
     {
         $paramValueReference[] = & $paramType;
         for ($i = 0; $i < count($paramArray); $i ++) {
