@@ -6,7 +6,7 @@ use Timkrysta\DB;
 use Timkrysta\Validator;
 use Timkrysta\Response;
 
-class Product {
+abstract class Product {
     /* 
      * Get specific product
      */
