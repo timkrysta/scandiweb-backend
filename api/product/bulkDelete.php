@@ -41,7 +41,7 @@ if ($validator->fails()) {
 
 
 $db = new DB();
-$values = implode(', ', array_fill(0, count($_POST['ids']), '?')); // ?, ?, ? ...
+$values = DB::getQuestionMarksString(count($_POST['ids']));
 $db->execute(
     "DELETE FROM products WHERE id IN ({$values})", 
     str_repeat('i', count($_POST['ids'])), 

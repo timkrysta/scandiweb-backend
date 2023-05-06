@@ -48,7 +48,7 @@ $attributes = [
 ];
 $db = new DB();
 $columns = implode(', ', array_keys($attributes));
-$values  = implode(', ', array_fill(0, count($attributes), '?')); // ?, ?, ? ...
+$values  = DB::getQuestionMarksString(count($attributes));
 $insertId = $db->insert(
     "INSERT INTO products ({$columns}) VALUES ({$values});",
     'ssdiiiii',
