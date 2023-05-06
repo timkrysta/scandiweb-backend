@@ -83,6 +83,6 @@ final class ApiTest extends TestCase
             $this->assertTrue(true);
             return;
         }
-        $this->assertSame(400, $response->getStatusCode());
+        $this->assertSame(422, $response->getStatusCode());
     }
 }

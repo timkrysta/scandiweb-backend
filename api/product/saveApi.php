@@ -30,7 +30,7 @@ if ($validator->fails()) {
     Response::json([
         'message' => 'Validation Failed',
         'error' => $validator->errors,
-    ], 400);
+    ], 422);
 }
 
 
@@ -56,7 +56,7 @@ $insertId = $db->insert(
 );
 
 if ($insertId === null) {
-    Response::json(['message' => 'Insertion failed'], 400);
+    Response::json(['message' => 'Insertion failed'], 422);
 }
 
 

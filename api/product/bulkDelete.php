@@ -34,7 +34,7 @@ if ($validator->fails()) {
     Response::json([
         'message' => 'Validation Failed',
         'error' => $validator->errors,
-    ], 400);
+    ], 422);
 }
 
 

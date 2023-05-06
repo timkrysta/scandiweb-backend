@@ -20,7 +20,7 @@ abstract class Product {
             Response::json([
                 'message' => 'Validation Failed',
                 'error' => $validator->errors,
-            ], 400);
+            ], 422);
         }
 
         $db = new DB();
@@ -30,7 +30,7 @@ abstract class Product {
             [ $_GET['sku'] ]
         );
         if ($result === null) {
-            Response::json(['message' => 'Getting the product failed'], 400);
+            Response::json(['message' => 'Getting the product failed'], 422);
         }
         return $result[0];
     }
@@ -43,7 +43,7 @@ abstract class Product {
         $db = new DB();
         $result = $db->select("SELECT * FROM products;");
         if ($result === null) {
-            Response::json(['message' => 'Getting products failed'], 400);
+            Response::json(['message' => 'Getting products failed'], 422);
         }
         return $result;
     }
