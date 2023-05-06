@@ -12,7 +12,7 @@ Api::exitIfHttpMethodNotIn(['POST']);
 
 $validationRules = [
     'sku'         => ['required', 'string', 'between:1,255', 'alpha_dash', 'unique:products,sku'],
-    'name'        => ['required', 'string', 'between:1,255', 'alpha_dash'],
+    'name'        => ['required', 'string', 'between:1,255'],
     'price'       => ['required', 'numeric', 'between:0.01,9999999999.99'],
     'productType' => ['required', 'in:dvd,book,furniture'],
     'size'        => ['numeric', 'between:1,32767', 'required_if:productType,dvd'],
