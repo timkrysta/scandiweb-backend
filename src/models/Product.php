@@ -7,32 +7,41 @@ use Timkrysta\Validator;
 use Timkrysta\Response;
 
 abstract class Product {
-    static protected $allowedColumns = [];
-
-    /*
-     * Get attributes
+    /**
+     * The list of columns that can be saved to the database
+     *
+     * @var string[]
      */
-    public function attributes()
+    protected static array $fillable = [];
+
+    /**
+     * Get attributes
+     *
+     * @return array
+     */
+    public function attributes(): array
     {
         $attributes = [];
-        foreach (static::$allowedColumns as $column) {
+        foreach (static::$fillable as $column) {
             $attributes[$column] = $this->$column;
         }
         return $attributes;
     }
 
-    /* 
+    /**
      * Save the product
+     *
+     * @return int
      */
-    public function save() {
-        // We don't need to sanitize the input values yourself because the prepared statement will automatically sanitize the values for you. 
+    public function save(): int
+    {
         $attributes = $this->attributes();
 
         $db = new DB();
         $columns = implode(', ', array_keys($attributes));
-        $values  = DB::getQuestionMarksString(count($attributes));
+        $placeholders  = DB::getPlaceholders(count($attributes));
         $insertId = $db->insert(
-            "INSERT INTO products ({$columns}) VALUES ({$values});",
+            "INSERT INTO products ({$columns}) VALUES ({$placeholders});",
             'ssdiiiii',
             array_values($attributes)
         );
@@ -40,12 +49,16 @@ abstract class Product {
         if ($insertId === null) {
             Response::json(['message' => 'Insertion failed'], 422);
         }
+        return $insertId;
     }
 
-    /* 
-     * Get specific product
+    /**
+     * Get a product by SKU
+     *
+     * @param string $sku The SKU to search for
+     * @return array The product with the specified SKU
      */
-    public static function findBySku($sku): array
+    public static function findBySku(string $sku): array
     {
         $validator = new Validator([
             'sku' => $sku
@@ -64,16 +77,19 @@ abstract class Product {
         $result = $db->select(
             "SELECT * FROM products WHERE sku = ?;", 
             's', 
-            [ $_GET['sku'] ]
+            [ $sku ]
         );
+
         if ($result === null) {
             Response::json(['message' => 'Getting the product failed'], 422);
         }
         return $result[0];
     }
 
-    /* 
+    /** 
      * Get all products
+     *
+     * @return array All products
      */
     public static function all(): array
     {
@@ -85,17 +101,19 @@ abstract class Product {
         return $result;
     }
 
-    /* 
-     * Delete product(s)
+    /** 
+     * Delete products by IDs
+     *
+     * @param int[] $productIds The IDs of the products to delete
      */
-    public static function delete(array $ids): void
+    public static function delete(array $productIds): void
     {
         $db = new DB();
-        $values = DB::getQuestionMarksString(count($ids));
+        $placeholders = DB::getPlaceholders(count($productIds));
         $db->execute(
-            "DELETE FROM products WHERE id IN ({$values})", 
-            str_repeat('i', count($ids)), 
-            $ids
+            "DELETE FROM products WHERE id IN ({$placeholders})", 
+            str_repeat('i', count($productIds)), 
+            $productIds
         );
     }
 }

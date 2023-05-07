@@ -198,7 +198,7 @@ class DB
         return $recordCount;
     }
 
-    public static function getQuestionMarksString(int $count): string
+    public static function getPlaceholders(int $count): string
     {
         return implode(', ', array_fill(0, $count, '?')); // ?, ?, ? ... 
     }
