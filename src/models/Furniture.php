@@ -4,7 +4,7 @@ namespace Timkrysta\Models;
 use Timkrysta\Models\Product;
 
 class Furniture extends Product {
-  static protected $fillable = ['sku', 'name', 'price', 'height', 'length', 'width'];
+  static protected array $fillable = ['sku', 'name', 'price', 'height', 'length', 'width'];
 
   public function __construct($attributes = []) {    
     $attributes = array_intersect_key($attributes, array_flip(self::$fillable));

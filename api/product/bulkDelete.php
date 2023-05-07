@@ -6,7 +6,7 @@ use Timkrysta\Validator;
 use Timkrysta\Response;
 use Timkrysta\Models\Product;
 
-Api::exitIfHttpMethodNotIn(['POST']);
+Api::exitIfRequestMethodNotSupported(['POST']);
 
 
 # TODO(tim): this is very ugly kind of validation

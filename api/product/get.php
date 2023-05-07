@@ -5,7 +5,7 @@ use Timkrysta\Api;
 use Timkrysta\Models\Product;
 use Timkrysta\Response;
 
-Api::exitIfHttpMethodNotIn(['GET']);
+Api::exitIfRequestMethodNotSupported(['GET']);
 
 $data = isset($_GET['sku'])
     ? Product::findBySku($_GET['sku'])

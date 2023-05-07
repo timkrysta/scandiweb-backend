@@ -3,16 +3,14 @@
 namespace Timkrysta;
 
 class Api {
-    public static function exitIfHttpMethodNotIn(array $methods): void
+    public static function exitIfRequestMethodNotSupported(array $supportedMethods): void
     {
-        if (in_array($_SERVER['REQUEST_METHOD'], $methods)) {
+        if (in_array($_SERVER['REQUEST_METHOD'], $supportedMethods, true)) {
             return;
         }
-        http_response_code(405);
-        header('Content-Type: application/json');
-        echo json_encode([
-            'message' => 'Method Not Allowed. This route supports only '.implode(', ', $methods).'.'
-        ]);
-        exit();
+
+        Response::json([
+            'message' => 'Method Not Allowed. This route supports only ' . implode(', ', $supportedMethods) . '.'
+        ], 405);
     }
 }

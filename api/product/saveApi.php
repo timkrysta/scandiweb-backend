@@ -1,17 +1,20 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'vendor/autoload.php';
 
 use Timkrysta\Api;
-use Timkrysta\DB;
 use Timkrysta\Validator;
 use Timkrysta\Response;
 use Timkrysta\Models\Book;
 use Timkrysta\Models\DVD;
 use Timkrysta\Models\Furniture;
 
-Api::exitIfHttpMethodNotIn(['POST']);
+Api::exitIfRequestMethodNotSupported(['POST']);
 
-$validationRules = [
+
+$validator = new Validator($_POST, [
     'sku'         => ['required', 'string', 'between:1,255', 'alpha_dash', 'unique:products,sku'],
     'name'        => ['required', 'string', 'between:1,255'],
     'price'       => ['required', 'numeric', 'between:0.01,9999999999.99'],
@@ -21,42 +24,27 @@ $validationRules = [
     'height'      => ['numeric', 'between:1,32767', 'required_if:productType,furniture'],
     'length'      => ['numeric', 'between:1,32767', 'required_if:productType,furniture'],
     'width'       => ['numeric', 'between:1,32767', 'required_if:productType,furniture'],
-];
-
-
-$validator = new Validator($_POST, $validationRules);
+]);
 
 
 if ($validator->fails()) {
     Response::validationFailed($validator->errors);
 }
 
+$attributes = $validator->validated();
 
 
-$attributes = [
-    'sku'    => $_POST['sku']    ?? null,
-    'name'   => $_POST['name']   ?? null,
-    'price'  => $_POST['price']  ?? null,
-    'size'   => $_POST['size']   ?? null,
-    'weight' => $_POST['weight'] ?? null,
-    'height' => $_POST['height'] ?? null,
-    'length' => $_POST['length'] ?? null,
-    'width'  => $_POST['width']  ?? null,
-];
-
-if ($attributes['weight'] !== null) {
+if (isset($attributes['weight'])) {
     $book = new Book($attributes);
     $book->save();
 }
-
-if ($attributes['size'] !== null) {
+elseif (isset($attributes['size'])) {
     $dvd = new DVD($attributes);
     $dvd->save();
 }
-
-if ($attributes['height'] !== null &&
-    $attributes['length'] !== null &&
-    $attributes['width']  !== null
+elseif (isset($attributes['height']) &&
+    isset($attributes['length']) &&
+    isset($attributes['width'])
 ) {
     $furniture = new Furniture($attributes);
     $furniture->save();

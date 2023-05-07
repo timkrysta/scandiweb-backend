@@ -3,9 +3,11 @@
 namespace Timkrysta;
 
 class Response {
+    public const DEFAULT_CORS_ORIGIN = 'http://localhost:3000';
+
     public static function json(mixed $data, int $response_code = 200): void
     {
-        Response::allowCorsRequests('http://localhost:3000');
+        self::allowCorsRequests(self::DEFAULT_CORS_ORIGIN);
         header('Content-Type: application/json');
         http_response_code($response_code);
         echo json_encode($data);
@@ -14,7 +16,7 @@ class Response {
 
     public static function validationFailed(array $errors): void
     {
-        Response::json([
+        self::json([
             'message' => 'Validation Failed',
             'error' => $errors,
         ], 422);
