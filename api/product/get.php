@@ -11,4 +11,4 @@ $data = isset($_GET['sku'])
     ? Product::findBySku($_GET['sku'])
     : Product::all();
 
-Response::json($data, 200);
+Response::json($data);

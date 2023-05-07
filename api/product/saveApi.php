@@ -28,10 +28,7 @@ $validator = new Validator($_POST, $validationRules);
 
 
 if ($validator->fails()) {
-    Response::json([
-        'message' => 'Validation Failed',
-        'error' => $validator->errors,
-    ], 422);
+    Response::validationFailed($validator->errors);
 }
 
 
@@ -70,4 +67,4 @@ if ($attributes['height'] !== null &&
 Response::json([
     'message' => 'Success',
     'obj' => $attributes
-], 200);
+]);

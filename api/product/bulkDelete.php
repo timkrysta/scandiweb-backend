@@ -28,10 +28,7 @@ $validator = new Validator($validationData, $validationRules);
 
 # TODO(tim): validation fails even if we pass X good ids to delete and one non existing
 if ($validator->fails()) {
-    Response::json([
-        'message' => 'Validation Failed',
-        'error' => $validator->errors,
-    ], 422);
+    Response::validationFailed($validator->errors);
 }
 
 
@@ -40,5 +37,5 @@ Product::delete($_POST['ids']);
 Response::json([
     'message' => 'Success',
     'deleted_ids' => array_values(array_unique($_POST['ids'] ?? []))
-], 200);
+]);
 
