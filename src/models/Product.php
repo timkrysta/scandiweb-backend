@@ -43,7 +43,7 @@ abstract class Product
         $placeholders  = DB::getPlaceholders(count($attributes));
         $insertId = $db->insert(
             "INSERT INTO products ({$columns}) VALUES ({$placeholders});",
-            'ssdiiiii',
+            str_repeat('s', count($attributes)),
             array_values($attributes)
         );
 

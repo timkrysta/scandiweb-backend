@@ -6,6 +6,11 @@ use Timkrysta\Models\Product;
 
 class DVD extends Product
 {
+    public $sku;
+    public $name;
+    public $price;
+    public $size;
+    
     /**
      * The list of columns that can be saved to the database.
      *
