@@ -1,12 +1,13 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'vendor/autoload.php';
 
 use Timkrysta\Api;
 use Timkrysta\DB;
 use Timkrysta\Validator;
 use Timkrysta\Response;
+use Timkrysta\Models\Book;
+use Timkrysta\Models\DVD;
+use Timkrysta\Models\Furniture;
 
 Api::exitIfHttpMethodNotIn(['POST']);
 
@@ -35,7 +36,6 @@ if ($validator->fails()) {
 
 
 
-
 $attributes = [
     'sku'    => $_POST['sku']    ?? null,
     'name'   => $_POST['name']   ?? null,
@@ -46,17 +46,23 @@ $attributes = [
     'length' => $_POST['length'] ?? null,
     'width'  => $_POST['width']  ?? null,
 ];
-$db = new DB();
-$columns = implode(', ', array_keys($attributes));
-$values  = DB::getQuestionMarksString(count($attributes));
-$insertId = $db->insert(
-    "INSERT INTO products ({$columns}) VALUES ({$values});",
-    'ssdiiiii',
-    array_values($attributes)
-);
 
-if ($insertId === null) {
-    Response::json(['message' => 'Insertion failed'], 422);
+if ($attributes['weight'] !== null) {
+    $book = new Book($attributes);
+    $book->save();
+}
+
+if ($attributes['size'] !== null) {
+    $dvd = new DVD($attributes);
+    $dvd->save();
+}
+
+if ($attributes['height'] !== null &&
+    $attributes['length'] !== null &&
+    $attributes['width']  !== null
+) {
+    $furniture = new Furniture($attributes);
+    $furniture->save();
 }
 
 

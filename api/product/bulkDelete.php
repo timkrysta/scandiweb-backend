@@ -1,15 +1,12 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
 
 use Timkrysta\Api;
-use Timkrysta\DB;
 use Timkrysta\Validator;
 use Timkrysta\Response;
+use Timkrysta\Models\Product;
 
 Api::exitIfHttpMethodNotIn(['POST']);
-
 
 
 # TODO(tim): this is very ugly kind of validation
@@ -38,17 +35,7 @@ if ($validator->fails()) {
 }
 
 
-
-
-$db = new DB();
-$values = DB::getQuestionMarksString(count($_POST['ids']));
-$db->execute(
-    "DELETE FROM products WHERE id IN ({$values})", 
-    str_repeat('i', count($_POST['ids'])), 
-    $_POST['ids']
-);
-
-
+Product::delete($_POST['ids']);
 
 Response::json([
     'message' => 'Success',
