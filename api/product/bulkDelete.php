@@ -1,15 +1,14 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
 
 use Timkrysta\Api;
 use Timkrysta\Validator;
 use Timkrysta\Response;
 use Timkrysta\Models\Product;
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
+
 Api::exitIfRequestMethodNotSupported(['POST']);
 
-
-# TODO(tim): this is very ugly kind of validation
 $validationData = [];
 $validationRules = [
     'ids' => ['required', 'array'],
@@ -26,16 +25,10 @@ if (isset($_POST['ids']) && is_array($_POST['ids'])) {
 
 $validator = new Validator($validationData, $validationRules);
 
-# TODO(tim): validation fails even if we pass X good ids to delete and one non existing
 if ($validator->fails()) {
     Response::validationFailed($validator->errors);
 }
 
-
 Product::delete($_POST['ids']);
 
-Response::json([
-    'message' => 'Success',
-    'deleted_ids' => array_values(array_unique($_POST['ids'] ?? []))
-]);
-
+Response::json(['message' => 'Success']);

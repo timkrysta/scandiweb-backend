@@ -2,7 +2,14 @@
 
 namespace Timkrysta;
 
-class Api {
+class Api
+{    
+    /**
+     * Exits when a request method is different than $supportedMethods.
+     *
+     * @param  string[] $supportedMethods
+     * @return void
+     */
     public static function exitIfRequestMethodNotSupported(array $supportedMethods): void
     {
         if (in_array($_SERVER['REQUEST_METHOD'], $supportedMethods, true)) {

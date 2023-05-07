@@ -6,16 +6,17 @@ use Timkrysta\DB;
 use Timkrysta\Validator;
 use Timkrysta\Response;
 
-abstract class Product {
+abstract class Product
+{
     /**
-     * The list of columns that can be saved to the database
+     * The list of columns that can be saved to the database.
      *
      * @var string[]
      */
     protected static array $fillable = [];
 
     /**
-     * Get attributes
+     * Get attributes.
      *
      * @return array
      */
@@ -29,7 +30,7 @@ abstract class Product {
     }
 
     /**
-     * Save the product
+     * Save the product to the database.
      *
      * @return int
      */
@@ -53,7 +54,7 @@ abstract class Product {
     }
 
     /**
-     * Get a product by SKU
+     * Get a product by SKU.
      *
      * @param string $sku The SKU to search for
      * @return array The product with the specified SKU
@@ -84,7 +85,7 @@ abstract class Product {
     }
 
     /** 
-     * Get all products
+     * Get all products.
      *
      * @return array All products
      */
@@ -99,12 +100,14 @@ abstract class Product {
     }
 
     /** 
-     * Delete products by IDs
+     * Delete products by IDs.
      *
      * @param int[] $productIds The IDs of the products to delete
      */
     public static function delete(array $productIds): void
     {
+        $productIds = array_values(array_unique($productIds ?? []));
+
         $db = new DB();
         $placeholders = DB::getPlaceholders(count($productIds));
         $db->execute(

@@ -9,28 +9,21 @@ use PDOException;
 use PDOStatement;
 
 /**
- * Generic DB class for handling DB operations.
- * Uses MySQLi and PreparedStatements.
+ * Generic class for handling database operations.
+ * Uses MySQLi or PDO with PreparedStatements.
  */
 class DB
 {
     private mysqli|PDO $conn;
-
     private string $host;
     private string $username;
     private string $password;
     private string $database;
 
-    /**
-     * PHP implicitly takes care of cleanup for default connection types.
-     * So no need to worry about closing the connection.
-     *
-     * Keeping things simple and that works!
-     */
-    public function __construct() {
+    public function __construct()
+    {
         $credentialsFile = $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'database/credentials.json';
-        $credentials = file_get_contents($credentialsFile);
-        $credentials = json_decode($credentials, true);
+        $credentials = json_decode(file_get_contents($credentialsFile), true);
 
         $this->host     = $credentials['host'];
         $this->username = $credentials['username'];
@@ -39,15 +32,6 @@ class DB
 
         $this->conn = $this->getConnection();
     }
-    /* TODO(tim): keep either above or this
-    public function __construct(
-        private string $host,
-        private string $username,
-        private string $password,
-        private string $database
-    ) {
-        $this->conn = $this->getConnection();
-    } */
 
     /**
      * If connection object is needed, use this method to get access to it.
@@ -86,7 +70,7 @@ class DB
     }
 
     /**
-     * To get database results.
+     * Get the database results.
      *
      * @param string $query
      * @param string $paramType
@@ -98,26 +82,26 @@ class DB
     {
         $stmt = $this->conn->prepare($query);
 
-        if (! empty($paramType) && ! empty($paramArray)) {
+        if (!empty($paramType) && !empty($paramArray)) {
             $this->bindQueryParams($stmt, $paramType, $paramArray);
         }
-        
+
         $stmt->execute();
         $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
-            $resultset = [];
+            $resultSet = [];
             while ($row = $result->fetch_assoc()) {
-                $resultset[] = $row;
+                $resultSet[] = $row;
             }
-            return $resultset;
+            return $resultSet;
         }
 
         return null;
     }
 
     /**
-     * To insert.
+     * Insert into the database.
      *
      * @param string $query
      * @param string $paramType
@@ -136,7 +120,7 @@ class DB
     }
 
     /**
-     * To execute query.
+     * Execute a query.
      *
      * @param string $query
      * @param string $paramType
@@ -148,7 +132,7 @@ class DB
     {
         $stmt = $this->conn->prepare($query);
 
-        if (! empty($paramType) && ! empty($paramArray)) {
+        if (!empty($paramType) && !empty($paramArray)) {
             $this->bindQueryParams($stmt, $paramType, $paramArray);
         }
         $stmt->execute();
@@ -166,9 +150,9 @@ class DB
      */
     public function bindQueryParams(mysqli_stmt|PDOStatement|false $stmt, string $paramType, array $paramArray = []): void
     {
-        $paramValueReference[] = & $paramType;
-        for ($i = 0; $i < count($paramArray); $i ++) {
-            $paramValueReference[] = & $paramArray[$i];
+        $paramValueReference[] = &$paramType;
+        for ($i = 0, $paramCount = count($paramArray); $i < $paramCount; $i++) {
+            $paramValueReference[] = &$paramArray[$i];
         }
         call_user_func_array(array(
             $stmt,
@@ -177,7 +161,7 @@ class DB
     }
 
     /**
-     * To get database results.
+     * Get record count.
      *
      * @param string $query
      * @param string $paramType
@@ -188,7 +172,7 @@ class DB
     public function getRecordCount(string $query, string $paramType = '', array $paramArray = []): int
     {
         $stmt = $this->conn->prepare($query);
-        if (! empty($paramType) && ! empty($paramArray)) {
+        if (!empty($paramType) && !empty($paramArray)) {
             $this->bindQueryParams($stmt, $paramType, $paramArray);
         }
         $stmt->execute();
@@ -198,8 +182,15 @@ class DB
         return $recordCount;
     }
 
+        
+    /**
+     * Get placeholder made of question marks like ?, ?, ? ...
+     *
+     * @param  int $count
+     * @return string
+     */
     public static function getPlaceholders(int $count): string
     {
-        return implode(', ', array_fill(0, $count, '?')); // ?, ?, ? ... 
+        return implode(', ', array_fill(0, $count, '?'));
     }
 }

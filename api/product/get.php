@@ -1,14 +1,15 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
 
 use Timkrysta\Api;
-use Timkrysta\Models\Product;
 use Timkrysta\Response;
+use Timkrysta\Models\Product;
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' .'vendor/autoload.php';
 
 Api::exitIfRequestMethodNotSupported(['GET']);
 
-$data = isset($_GET['sku'])
-    ? Product::findBySku($_GET['sku'])
-    : Product::all();
-
-Response::json($data);
+Response::json(
+    isset($_GET['sku'])
+        ? Product::findBySku($_GET['sku'])
+        : Product::all()
+);

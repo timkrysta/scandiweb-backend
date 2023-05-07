@@ -4,8 +4,11 @@ namespace Timkrysta;
 
 use Timkrysta\DB;
 
-
-class Validator {
+class Validator
+{
+    /**
+     * Errors that were encoutered during validation
+     */
     public array $errors = [];
 
     public function __construct(
@@ -26,7 +29,7 @@ class Validator {
     {
         return count($this->errors) > 0;
     }
-    
+
     /**
      * Get the attributes and values that were validated.
      *
@@ -35,20 +38,25 @@ class Validator {
     public function validated(): array
     {
         return array_diff_key(
-            array_intersect_key($this->data, $this->validationRules), 
+            array_intersect_key($this->data, $this->validationRules),
             $this->errors
         );
     }
-
     
-
-    private function validateInput($input, $rules)
+    /**
+     * Validate single input for all validation rules it has
+     *
+     * @param  mixed $input
+     * @param  array $rules
+     * @return void
+     */
+    private function validateInput(mixed $input, array $rules): void
     {
         foreach ($rules as $rule) {
             $ruleParts = explode(':', $rule);
             $ruleName = $ruleParts[0];
             $ruleParams = isset($ruleParts[1]) ? explode(',', $ruleParts[1]) : [];
-    
+
             switch ($ruleName) {
                 case 'required':
                     if (!isset($this->data[$input])) {
@@ -58,8 +66,12 @@ class Validator {
                 case 'required_if':
                     $otherField = $ruleParams[0];
                     $otherValue = $ruleParams[1];
-    
-                    if (isset($this->data[$otherField]) && $this->data[$otherField] === $otherValue && !isset($this->data[$input])) {
+
+                    if (
+                        isset($this->data[$otherField]) 
+                        && $this->data[$otherField] === $otherValue 
+                        && !isset($this->data[$input])
+                    ) {
                         $this->errors[$input][] = "Pole {$input} jest wymagane gdy {$otherField} ma wartość {$otherValue}.";
                     }
                     break;
@@ -91,7 +103,7 @@ class Validator {
                     if (!isset($this->data[$input])) break;
                     $min = $ruleParams[0];
                     $max = $ruleParams[1];
-                    
+
                     if (in_array('string', $rules)) {
                         $inputLength = strlen($this->data[$input]);
                         if ($inputLength < $min || $inputLength > $max) {
@@ -127,15 +139,22 @@ class Validator {
             }
         }
     }
-
-    private function getRecordCount($input, $ruleParams)
+    
+    /**
+     * Get record count.
+     *
+     * @param  mixed $input
+     * @param  mixed $ruleParams
+     * @return int
+     */
+    private function getRecordCount(mixed $input, mixed $ruleParams): int
     {
         $table  = $ruleParams[0];
         $column = $ruleParams[1];
         $db = new DB();
         $result = $db->getRecordCount(
-            "SELECT * FROM {$table} WHERE {$column} = ?;", 
-            's', 
+            "SELECT * FROM {$table} WHERE {$column} = ?;",
+            's',
             [$this->data[$input]]
         );
         return $result;

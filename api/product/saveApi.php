@@ -1,8 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-require $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'vendor/autoload.php';
 
 use Timkrysta\Api;
 use Timkrysta\Validator;
@@ -11,8 +7,9 @@ use Timkrysta\Models\Book;
 use Timkrysta\Models\DVD;
 use Timkrysta\Models\Furniture;
 
-Api::exitIfRequestMethodNotSupported(['POST']);
+require_once $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'vendor/autoload.php';
 
+Api::exitIfRequestMethodNotSupported(['POST']);
 
 $validator = new Validator($_POST, [
     'sku'         => ['required', 'string', 'between:1,255', 'alpha_dash', 'unique:products,sku'],
@@ -26,33 +23,25 @@ $validator = new Validator($_POST, [
     'width'       => ['numeric', 'between:1,32767', 'required_if:productType,furniture'],
 ]);
 
-
 if ($validator->fails()) {
     Response::validationFailed($validator->errors);
 }
 
 $attributes = $validator->validated();
 
-
 if (isset($attributes['weight'])) {
     $book = new Book($attributes);
     $book->save();
-}
-elseif (isset($attributes['size'])) {
+} elseif (isset($attributes['size'])) {
     $dvd = new DVD($attributes);
     $dvd->save();
-}
-elseif (isset($attributes['height']) &&
-    isset($attributes['length']) &&
-    isset($attributes['width'])
+} elseif (
+    isset($attributes['height'])
+    && isset($attributes['length'])
+    && isset($attributes['width'])
 ) {
     $furniture = new Furniture($attributes);
     $furniture->save();
 }
 
-
-
-Response::json([
-    'message' => 'Success',
-    'obj' => $attributes
-]);
+Response::json(['message' => 'Success']);
