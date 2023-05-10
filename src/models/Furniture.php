@@ -6,6 +6,13 @@ use Timkrysta\Models\Product;
 
 class Furniture extends Product
 {
+    public $sku;
+    public $name;
+    public $price;
+    public $height;
+    public $length;
+    public $width;
+
     /**
      * The list of columns that can be saved to the database.
      *

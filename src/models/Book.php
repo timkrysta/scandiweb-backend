@@ -6,6 +6,11 @@ use Timkrysta\Models\Product;
 
 class Book extends Product
 {
+    public $sku;
+    public $name;
+    public $price;
+    public $weight;
+
     /**
      * The list of columns that can be saved to the database.
      *
