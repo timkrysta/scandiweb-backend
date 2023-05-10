@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-require_once 'support/ApiTest.php';
+require_once __DIR__.'/../support/ApiTest.php';
 
 use GuzzleHttp\Exception\ClientException;
 
 final class StoreApiTest extends ApiTest
 {
-    protected const STORE_API_ENDPOINT = '/web-developer-test-assignment/api/product/saveApi.php';
-
     public function test_store_product_success(): void
     {
         try {
