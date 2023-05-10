@@ -4,6 +4,45 @@ namespace Timkrysta;
 
 use Timkrysta\DB;
 
+/** 
+ * -----------------------------------------------------------------------------
+ * ------------------------ Available Validation Rules -------------------------
+ * -----------------------------------------------------------------------------
+ * Below is a list of all available validation rules and their function:
+ * 
+ * 
+ * -----------------------------------------------------------------------------
+ * required
+ * The field under validation must be present in the input data and not empty. A field is "empty" if it meets one of the following criteria:
+ * -----------------------------------------------------------------------------
+ * required_if:anotherfield,value,...
+ * The field under validation must be present and not empty if the anotherfield field is equal to any value.
+ * -----------------------------------------------------------------------------
+ * string
+ * The field under validation must be a string.
+ * -----------------------------------------------------------------------------
+ * numeric
+ * The field under validation must be numeric. (https://www.php.net/manual/en/function.is-numeric.php)
+ * -----------------------------------------------------------------------------
+ * array
+ * The field under validation must be a PHP array.
+ * -----------------------------------------------------------------------------
+ * alpha_dash
+ * The field under validation must be entirely Unicode alpha-numeric characters contained in \p{L}, \p{M}, \p{N}, as well as ASCII dashes (-) and ASCII underscores (_).
+ * -----------------------------------------------------------------------------
+ * between:min,max
+ * The field under validation must have a size between the given min and max (inclusive). Strings, numerics, arrays, and files are evaluated in the same fashion as the size rule.
+ * -----------------------------------------------------------------------------
+ * in:foo,bar,...
+ * The field under validation must be included in the given list of values.
+ * -----------------------------------------------------------------------------
+ * unique:table,column
+ * The field under validation must not exist within the given database table.
+ * -----------------------------------------------------------------------------
+ * exists:table,column
+ * The field under validation must exist in a given database table.
+ * -----------------------------------------------------------------------------
+ */
 class Validator
 {
     /**
