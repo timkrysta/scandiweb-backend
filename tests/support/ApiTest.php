@@ -10,6 +10,7 @@ class ApiTest extends TestCase
     protected Client $client;
     protected const STORE_API_ENDPOINT = '/web-developer-test-assignment/api/product/saveApi.php';
     protected const GET_API_ENDPOINT = '/web-developer-test-assignment/api/product/get.php';
+    protected const BULK_DELETE_API_ENDPOINT = '/web-developer-test-assignment/api/product/bulkDelete.php';
 
     /**
      * This method is called before each test.
