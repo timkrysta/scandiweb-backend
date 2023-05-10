@@ -22,7 +22,7 @@ class DB
 
     public function __construct()
     {
-        $credentialsFile = $_SERVER['DOCUMENT_ROOT'] . '/web-developer-test-assignment/' . 'database/credentials.json';
+        $credentialsFile = __DIR__ . '/../database/credentials.json';
         $credentials = json_decode(file_get_contents($credentialsFile), true);
 
         $this->host     = $credentials['host'];
