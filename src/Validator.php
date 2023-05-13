@@ -99,7 +99,7 @@ class Validator
             switch ($ruleName) {
                 case 'required':
                     if (!isset($this->data[$input])) {
-                        $this->errors[$input][] = "Pole {$input} jest wymagane.";
+                        $this->errors[$input][] = "The {$input} field is required.";
                     }
                     break;
                 case 'required_if':
@@ -111,31 +111,31 @@ class Validator
                         && $this->data[$otherField] === $otherValue 
                         && !isset($this->data[$input])
                     ) {
-                        $this->errors[$input][] = "Pole {$input} jest wymagane gdy {$otherField} ma wartość {$otherValue}.";
+                        $this->errors[$input][] = "The {$input} field is required when {$otherField} is {$otherValue}.";
                     }
                     break;
                 case 'string':
                     if (!isset($this->data[$input])) break;
                     if (!is_string($this->data[$input])) {
-                        $this->errors[$input][] = "Pole {$input} musi być ciągiem znaków.";
+                        $this->errors[$input][] = "The {$input} must be a string.";
                     }
                     break;
                 case 'numeric':
                     if (!isset($this->data[$input])) break;
                     if (!is_numeric($this->data[$input])) {
-                        $this->errors[$input][] = "Pole {$input} musi być liczbą.";
+                        $this->errors[$input][] = "The {$input} must be a number.";
                     }
                     break;
                 case 'array':
                     if (!isset($this->data[$input])) break;
                     if (!is_array($this->data[$input])) {
-                        $this->errors[$input][] = "Pole {$input} musi być tablicą.";
+                        $this->errors[$input][] = "The {$input} must be an array.";
                     }
                     break;
                 case 'alpha_dash':
                     if (!isset($this->data[$input])) break;
                     if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $this->data[$input])) {
-                        $this->errors[$input][] = "Pole {$input} może zawierać jedynie litery, cyfry i myślniki.";
+                        $this->errors[$input][] = "The {$input} must only contain letters, numbers, dashes and underscores.";
                     }
                     break;
                 case 'between':
@@ -146,33 +146,33 @@ class Validator
                     if (in_array('string', $rules)) {
                         $inputLength = strlen($this->data[$input]);
                         if ($inputLength < $min || $inputLength > $max) {
-                            $this->errors[$input][] = "Pole {$input} musi zawierać się w granicach {$min} - {$max} znaków.";
+                            $this->errors[$input][] = "The {$input} must be between {$min} and {$max} characters.";
                         }
                     }
                     if (in_array('numeric', $rules)) {
                         if ($this->data[$input] < $min || $this->data[$input] > $max) {
-                            $this->errors[$input][] = "Pole {$input} musi zawierać się w granicach {$min} - {$max} znaków.";
+                            $this->errors[$input][] = "The {$input} must be between {$min} and {$max}.";
                         }
                     }
                     break;
                 case 'in':
                     if (!isset($this->data[$input])) break;
                     if (!in_array($this->data[$input], $ruleParams)) {
-                        $this->errors[$input][] = "Zaznaczony element {$input} jest nieprawidłowy.";
+                        $this->errors[$input][] = "The selected {$input} is invaild.";
                     }
                     break;
                 case 'unique':
                     if (!isset($this->data[$input])) break;
                     $result = $this->getRecordCount($input, $ruleParams);
                     if ($result > 0) {
-                        $this->errors[$input][] = "Taki {$input} już występuje.";
+                        $this->errors[$input][] = "The {$input} has already been taken.";
                     }
                     break;
                 case 'exists':
                     if (!isset($this->data[$input])) break;
                     $result = $this->getRecordCount($input, $ruleParams);
                     if ($result <= 0) {
-                        $this->errors[$input][] = "Zaznaczone pole {$input} jest nieprawidłowe.";
+                        $this->errors[$input][] = "The selected {$input} is invaild.";
                     }
                     break;
             }
