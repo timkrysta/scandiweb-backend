@@ -8,16 +8,16 @@ use GuzzleHttp\Client;
 class ApiTest extends TestCase
 {
     protected Client $client;
-    protected const STORE_API_ENDPOINT = '/web-developer-test-assignment/api/product/saveApi.php';
-    protected const GET_API_ENDPOINT = '/web-developer-test-assignment/api/product/get.php';
-    protected const BULK_DELETE_API_ENDPOINT = '/web-developer-test-assignment/api/product/bulkDelete.php';
+    protected const STORE_API_ENDPOINT       = '/api/product/saveApi.php';
+    protected const GET_API_ENDPOINT         = '/api/product/get.php';
+    protected const BULK_DELETE_API_ENDPOINT = '/api/product/bulkDelete.php';
 
     /**
      * This method is called before each test.
      */
     protected function setUp(): void
     {
-        $this->client = new Client(['base_uri' => 'http://localhost/']);
+        $this->client = new Client(['base_uri' => 'http://localhost:8080']);
     }
 
     protected function addProduct()
