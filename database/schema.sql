@@ -1,3 +1,5 @@
+/* The `height`, `width` and `length` were implemented as a separate columns because it could be better in the future to implement filters. */
+
 CREATE DATABASE web_developer_test_assignment;
 
 USE web_developer_test_assignment;
