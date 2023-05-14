@@ -23,7 +23,7 @@ class ApiTest extends TestCase
     protected function addProduct()
     {
         $product = [
-            "sku" => "ProductSku" . rand(0, 10000000),
+            "sku" => "ProductSku" . uniqid(),
             "name" => "ProductName",
             "price" => 100,
             "productType" => "dvd",
