@@ -2,11 +2,16 @@
 
 <img src="https://github.com/laravel/sanctum/workflows/tests/badge.svg" alt="Build Status" style="max-width: 100%;">
 
+## Demo
+[scandiweb.justeuro.eu](https://scandiweb.justeuro.eu:8080)
+
 ## Introduction
 This is an API created for a product management system. It includes three endpoints:
-1. adding a new product,
-2. retrieving product(s) details,
-3. bulk delete of products
+| Purpose                    | Endpoint                                                              |
+|----------------------------|-----------------------------------------------------------------------|
+| 1. Adding a new product    | [POST /api/product/saveApi](#endpoint-1-post-apiproductsaveapi)       |
+| 2. Retrieving product(s)   | [GET /api/product/get](#endpoint-2-get-apiproductget)                 |
+| 3. Bulk delete of products | [POST /api/product/bulkDelete](#endpoint-3-post-apiproductbulkdelete) |
 
 <br>
 
@@ -129,6 +134,10 @@ If `ids` parameter is not present, the API will return an error:
 
 <br>
 
+## Author
+[Tymoteusz Krysta](https://www.linkedin.com/in/tim-krysta/) - krystatymoteusz@gmail.com
+
+<br>
 
 ## Final provisions
-- The Frontend is located here: [https://github.com/timkrysta/scandiweb-frontend](https://github.com/timkrysta/scandiweb-frontend)
+The Frontend is located here: [https://github.com/timkrysta/scandiweb-frontend](https://github.com/timkrysta/scandiweb-frontend)
