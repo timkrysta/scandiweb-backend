@@ -24,7 +24,7 @@ abstract class Product
     {
         $attributes = [];
         foreach (static::$fillable as $column) {
-            $attributes[$column] = $this->$column;
+            $attributes[$column] = strip_tags($this->$column);
         }
         return $attributes;
     }
@@ -94,7 +94,7 @@ abstract class Product
         $db = new DB();
         $result = $db->select("SELECT * FROM products;");
         if ($result === null) {
-            Response::json(['message' => 'Getting products failed'], 422);
+            Response::json([]);
         }
         return $result;
     }
