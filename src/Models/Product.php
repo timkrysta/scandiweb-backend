@@ -3,6 +3,7 @@
 namespace Timkrysta\Models;
 
 use Timkrysta\DB;
+use Timkrysta\ProductValidator;
 use Timkrysta\Validator;
 use Timkrysta\Response;
 
@@ -61,11 +62,7 @@ abstract class Product
      */
     public static function findBySku(string $sku): array
     {
-        $validator = new Validator([
-            'sku' => $sku
-        ], [
-            'sku' => ['required', 'string', 'between:1,255', 'alpha_dash', 'exists:products,sku'],
-        ]);
+        $validator = ProductValidator::validateFindBySkuRequest($sku);
 
         if ($validator->fails()) {
             Response::validationFailed($validator->errors);
