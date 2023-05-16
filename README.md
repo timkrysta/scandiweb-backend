@@ -141,3 +141,4 @@ If `ids` parameter is not present, the API will return an error:
 
 ## Final provisions
 The Frontend is located here: [https://github.com/timkrysta/scandiweb-frontend](https://github.com/timkrysta/scandiweb-frontend)
+
