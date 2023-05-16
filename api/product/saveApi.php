@@ -30,18 +30,16 @@ if ($validator->fails()) {
 $attributes = $validator->validated();
 
 if (isset($attributes['weight'])) {
-    $book = new Book($attributes);
-    $book->save();
+    $product = new Book($attributes);
 } elseif (isset($attributes['size'])) {
-    $dvd = new DVD($attributes);
-    $dvd->save();
+    $product = new DVD($attributes);
 } elseif (
     isset($attributes['height'])
     && isset($attributes['length'])
     && isset($attributes['width'])
 ) {
-    $furniture = new Furniture($attributes);
-    $furniture->save();
+    $product = new Furniture($attributes);
 }
+$product->save();
 
 Response::json(['message' => 'Success']);
