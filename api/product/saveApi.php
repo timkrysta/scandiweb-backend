@@ -2,9 +2,6 @@
 
 use Timkrysta\Api;
 use Timkrysta\Response;
-use Timkrysta\Models\Book;
-use Timkrysta\Models\DVD;
-use Timkrysta\Models\Furniture;
 use Timkrysta\ProductValidator;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -19,17 +16,17 @@ if ($validator->fails()) {
 
 $attributes = $validator->validated();
 
-if (isset($attributes['weight'])) {
-    $product = new Book($attributes);
-} elseif (isset($attributes['size'])) {
-    $product = new DVD($attributes);
-} elseif (
-    isset($attributes['height'])
-    && isset($attributes['length'])
-    && isset($attributes['width'])
+$className = ucfirst(strtolower($attributes['productType']));
+$fullyQualifiedClassName = "Timkrysta\\Models\\{$className}";
+if (
+    !class_exists($fullyQualifiedClassName)
+    || !is_subclass_of($fullyQualifiedClassName, \Timkrysta\Models\Product::class)
 ) {
-    $product = new Furniture($attributes);
+    Response::json([
+        'message' => "Invalid product type: {$className}"
+    ], 422);
 }
+$product = new $fullyQualifiedClassName($attributes);
 $product->save();
 
 Response::json(['message' => 'Success']);
