@@ -6,28 +6,26 @@ use Timkrysta\Models\Product;
 
 class Book extends Product
 {
-    public $sku;
-    public $name;
-    public $price;
-    public $weight;
+    /**
+     * Book's specific properties
+     */
+    protected $weight;
+
+    public function __construct(array $attributes)
+    {
+        parent::__construct($attributes);
+        $this->weight = $attributes['weight'];
+    }
 
     /**
-     * The list of columns that can be saved to the database.
+     * Get attributes.
      *
-     * @var string[]
+     * @return array
      */
-    static protected array $fillable = [
-        'sku',
-        'name',
-        'price',
-        'weight'
-    ];
-
-    public function __construct(array $attributes = [])
+    public function attributes(): array
     {
-        $attributes = array_intersect_key($attributes, array_flip(self::$fillable));
-        foreach ($attributes as $column => $value) {
-            $this->$column = $value;
-        }
+        return array_merge(parent::attributes(), [
+            'weight' => $this->weight
+        ]);
     }
 }

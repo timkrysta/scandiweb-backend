@@ -4,17 +4,23 @@ namespace Timkrysta\Models;
 
 use Timkrysta\DB;
 use Timkrysta\ProductValidator;
-use Timkrysta\Validator;
 use Timkrysta\Response;
 
 abstract class Product
 {
     /**
-     * The list of columns that can be saved to the database.
-     *
-     * @var string[]
+     * Universal properties of every product
      */
-    protected static array $fillable = [];
+    protected $sku;
+    protected $name;
+    protected $price;
+
+    public function __construct(array $attributes)
+    {
+        $this->sku   = $attributes['sku'];
+        $this->name  = $attributes['name'];
+        $this->price = $attributes['price'];
+    }
 
     /**
      * Get attributes.
@@ -23,11 +29,11 @@ abstract class Product
      */
     public function attributes(): array
     {
-        $attributes = [];
-        foreach (static::$fillable as $column) {
-            $attributes[$column] = strip_tags($this->$column);
-        }
-        return $attributes;
+        return [
+            'sku'   => $this->sku,
+            'name'  => $this->name,
+            'price' => $this->price,
+        ];
     }
 
     /**
@@ -70,9 +76,9 @@ abstract class Product
 
         $db = new DB();
         $result = $db->select(
-            "SELECT * FROM products WHERE sku = ?;", 
-            's', 
-            [ $sku ]
+            "SELECT * FROM products WHERE sku = ?;",
+            's',
+            [$sku]
         );
 
         if ($result === null) {
@@ -108,8 +114,8 @@ abstract class Product
         $db = new DB();
         $placeholders = DB::getPlaceholders(count($productIds));
         $db->execute(
-            "DELETE FROM products WHERE id IN ({$placeholders})", 
-            str_repeat('i', count($productIds)), 
+            "DELETE FROM products WHERE id IN ({$placeholders})",
+            str_repeat('i', count($productIds)),
             $productIds
         );
     }
