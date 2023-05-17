@@ -20,7 +20,7 @@ class ApiTest extends TestCase
         $this->client = new Client(['base_uri' => 'http://localhost:8080']);
     }
 
-    protected function addProduct()
+    protected function getProduct($attributes = [])
     {
         $product = [
             "sku" => "ProductSku" . uniqid(),
@@ -33,9 +33,15 @@ class ApiTest extends TestCase
             "length" => null,
             "width" => null
         ];
-        $this->client->post(self::STORE_API_ENDPOINT, [
-            'form_params' => $product
-        ]);
+        $product = array_merge($product, $attributes);
         return $product;
+    }
+    
+    protected function addProduct($attributes = [])
+    {
+        $response = $this->client->post(self::STORE_API_ENDPOINT, [
+            'form_params' => $this->getProduct($attributes)
+        ]);
+        return $response;
     }
 }

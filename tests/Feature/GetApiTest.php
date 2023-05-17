@@ -11,7 +11,9 @@ final class GetApiTest extends ApiTest
     public function test_getting_single_product_success(): void
     {
         try {
-            $product = $this->addProduct();
+            $product = $this->getProduct();
+            $this->addProduct($product);
+
             $response = $this->client->get(self::GET_API_ENDPOINT, [
                 'query' => [
                     "sku" => $product['sku'],
@@ -30,8 +32,12 @@ final class GetApiTest extends ApiTest
     public function test_getting_all_products_success(): void
     {
         try {
-            $product1 = $this->addProduct();
-            $product2 = $this->addProduct();
+            $product1 = $this->getProduct();
+            $this->addProduct($product1);
+            
+            $product2 = $this->getProduct();
+            $this->addProduct($product2);
+
             $response = $this->client->get(self::GET_API_ENDPOINT);
 
             $body = $response->getBody()->getContents();
