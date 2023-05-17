@@ -4,7 +4,7 @@ namespace Timkrysta\Models;
 
 use Timkrysta\Models\Product;
 
-class Dvdd extends Product
+class Dvd extends Product
 {
     public $sku;
     public $name;
