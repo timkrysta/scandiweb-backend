@@ -35,6 +35,28 @@ abstract class Product
             'price' => $this->price,
         ];
     }
+    
+    /**
+     * Create a new product from an array of attributes without using conditionals to handle product differences
+     *
+     * @param  array $attributes
+     * @return void
+     */
+    public static function create(array $attributes): void
+    {
+        $className = ucfirst(strtolower($attributes['productType']));
+        $fullyQualifiedClassName = self::getNamespace() . '\\' . $className;
+
+        if (
+            !class_exists($fullyQualifiedClassName)
+            || !is_subclass_of($fullyQualifiedClassName, Product::class)
+        ) {
+            Response::json(['message' => 'Invalid product type'], 422);
+        }
+
+        $product = new $fullyQualifiedClassName($attributes);
+        $product->save();
+    }
 
     /**
      * Save the product to the database.
@@ -118,5 +140,12 @@ abstract class Product
             str_repeat('i', count($productIds)),
             $productIds
         );
+    }
+
+    public static function getNamespace(): string
+    {
+        $reflectionClass = new \ReflectionClass(self::class);
+        $namespace = $reflectionClass->getNamespaceName();
+        return $namespace;
     }
 }

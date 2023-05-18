@@ -3,6 +3,7 @@
 use Timkrysta\Api;
 use Timkrysta\Response;
 use Timkrysta\ProductValidator;
+use Timkrysta\Models\Product;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -16,17 +17,6 @@ if ($validator->fails()) {
 
 $attributes = $validator->validated();
 
-$className = ucfirst(strtolower($attributes['productType']));
-$fullyQualifiedClassName = "Timkrysta\\Models\\{$className}";
-if (
-    !class_exists($fullyQualifiedClassName)
-    || !is_subclass_of($fullyQualifiedClassName, \Timkrysta\Models\Product::class)
-) {
-    Response::json([
-        'message' => "Invalid product type: {$className}"
-    ], 422);
-}
-$product = new $fullyQualifiedClassName($attributes);
-$product->save();
+Product::create($attributes);
 
 Response::json(['message' => 'Success']);
