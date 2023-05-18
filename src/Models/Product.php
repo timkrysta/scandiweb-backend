@@ -4,17 +4,23 @@ namespace Timkrysta\Models;
 
 use Timkrysta\DB;
 use Timkrysta\ProductValidator;
-use Timkrysta\Validator;
 use Timkrysta\Response;
 
 abstract class Product
 {
     /**
-     * The list of columns that can be saved to the database.
-     *
-     * @var string[]
+     * Universal properties of every product
      */
-    protected static array $fillable = [];
+    protected $sku;
+    protected $name;
+    protected $price;
+
+    public function __construct(array $attributes)
+    {
+        $this->sku   = $attributes['sku'];
+        $this->name  = $attributes['name'];
+        $this->price = $attributes['price'];
+    }
 
     /**
      * Get attributes.
@@ -23,11 +29,33 @@ abstract class Product
      */
     public function attributes(): array
     {
-        $attributes = [];
-        foreach (static::$fillable as $column) {
-            $attributes[$column] = strip_tags($this->$column);
+        return [
+            'sku'   => $this->sku,
+            'name'  => $this->name,
+            'price' => $this->price,
+        ];
+    }
+    
+    /**
+     * Create a new product from an array of attributes without using conditionals to handle product differences
+     *
+     * @param  array $attributes
+     * @return void
+     */
+    public static function create(array $attributes): void
+    {
+        $className = ucfirst(strtolower($attributes['productType']));
+        $fullyQualifiedClassName = self::getNamespace() . '\\' . $className;
+
+        if (
+            !class_exists($fullyQualifiedClassName)
+            || !is_subclass_of($fullyQualifiedClassName, Product::class)
+        ) {
+            Response::json(['message' => 'Invalid product type'], 422);
         }
-        return $attributes;
+
+        $product = new $fullyQualifiedClassName($attributes);
+        $product->save();
     }
 
     /**
@@ -70,9 +98,9 @@ abstract class Product
 
         $db = new DB();
         $result = $db->select(
-            "SELECT * FROM products WHERE sku = ?;", 
-            's', 
-            [ $sku ]
+            "SELECT * FROM products WHERE sku = ?;",
+            's',
+            [$sku]
         );
 
         if ($result === null) {
@@ -108,9 +136,16 @@ abstract class Product
         $db = new DB();
         $placeholders = DB::getPlaceholders(count($productIds));
         $db->execute(
-            "DELETE FROM products WHERE id IN ({$placeholders})", 
-            str_repeat('i', count($productIds)), 
+            "DELETE FROM products WHERE id IN ({$placeholders})",
+            str_repeat('i', count($productIds)),
             $productIds
         );
+    }
+
+    public static function getNamespace(): string
+    {
+        $reflectionClass = new \ReflectionClass(self::class);
+        $namespace = $reflectionClass->getNamespaceName();
+        return $namespace;
     }
 }

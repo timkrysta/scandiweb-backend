@@ -4,17 +4,17 @@ namespace Timkrysta\Models;
 
 use Timkrysta\Models\Product;
 
-class Book extends Product
+class Dvd extends Product
 {
     /**
-     * Book's specific properties
+     * Dvd's specific properties
      */
-    protected $weight;
+    protected $size;
 
     public function __construct(array $attributes)
     {
         parent::__construct($attributes);
-        $this->weight = $attributes['weight'];
+        $this->size = $attributes['size'];
     }
 
     /**
@@ -25,7 +25,7 @@ class Book extends Product
     public function attributes(): array
     {
         return array_merge(parent::attributes(), [
-            'weight' => $this->weight
+            'size' => $this->size
         ]);
     }
 }

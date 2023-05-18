@@ -6,32 +6,32 @@ use Timkrysta\Models\Product;
 
 class Furniture extends Product
 {
-    public $sku;
-    public $name;
-    public $price;
-    public $height;
-    public $length;
-    public $width;
+    /**
+     * Furniture's specific properties
+     */
+    protected $height;
+    protected $length;
+    protected $width;
+
+    public function __construct(array $attributes)
+    {
+        parent::__construct($attributes);
+        $this->height = $attributes['height'];
+        $this->length = $attributes['length'];
+        $this->width  = $attributes['width'];
+    }
 
     /**
-     * The list of columns that can be saved to the database.
+     * Get attributes.
      *
-     * @var string[]
+     * @return array
      */
-    static protected array $fillable = [
-        'sku', 
-        'name', 
-        'price', 
-        'height', 
-        'length', 
-        'width'
-    ];
-
-    public function __construct(array $attributes = [])
+    public function attributes(): array
     {
-        $attributes = array_intersect_key($attributes, array_flip(self::$fillable));
-        foreach ($attributes as $column => $value) {
-            $this->$column = $value;
-        }
+        return array_merge(parent::attributes(), [
+            'height' => $this->height,
+            'length' => $this->length,
+            'width'  => $this->width
+        ]);
     }
 }
